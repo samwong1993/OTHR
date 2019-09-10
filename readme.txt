@@ -8,7 +8,7 @@ UpBound_beta.m: Return the upper bound of beta.
 proj_ball.m: Projection on a ball.
 PD.m/graPD.m/hessPD.m/GraF.m: Calculate 1. P/D. 2. Gradient of P/D on beta.  3. Hessian of P/D on beta. 4. Gradient of objective function on beta.
 generator.m: Generate sythetic simulation data.
-raypath.m£ºPlot the ray path.
+raypath.m: Plot the ray path.
 Initialization.m: Our initialization strategy.
 GPGD.m: Our proposed method.
 pltMCCRLB.m: The Monte Carlo simulation can be plotted directly by pltMCCRLB('realdata_log.txt','*k-').
