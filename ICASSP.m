@@ -2,7 +2,7 @@ clear
 fid=fopen('realdata_log.txt','a+');
 R = 6371.2;
 %plt = 1 plot the earth,emitter,sensors and the generated sequence
-plt = 0;
+plt = 1;
 if plt == 1
     figure('color','k')
     %Add legend
@@ -30,7 +30,7 @@ if plt == 1
     axis equal;
     axis auto;
 end
-M = 3;
+M = 5;
 N = M*(M-1)/2;
 Omega = 0.5*(ones(N,N) + eye(N));
 inv_Omega = Omega^-1;
@@ -51,27 +51,27 @@ delta = 0.1;
 [max_dis,min_dis,upper] = beta_bound(M,F,R,Rb,Rm,Ym);
 [G] = generate_G(N,M);
 %[emitter,XYZ,beta0] = generator(M,F,R,Rb,Rm,Ym,max_dis,min_dis);
-%beta0 = [0.114957231412252,0.449398124172348,0.277420425918117,0.0168095219080640,0.103488345084960];
-beta0 = [0.277420425918117,0.0168095219080640,0.103488345084960];
+beta0 = [0.114957231412252,0.449398124172348,0.277420425918117,0.0168095219080640,0.103488345084960];
+%beta0 = [0.277420425918117,0.0168095219080640,0.103488345084960];
 XYZ = zeros(M,3);
 %Hong Kong
 [x0 y0 z0] = LGLTtoXYZ(114.16,22.28,R);
 emitter = [x0 y0 z0]';
-% %Bei Jing
-% [x0 y0 z0] = LGLTtoXYZ(116.41,39.90,R);
-% XYZ(1,:) = [x0 y0 z0];
-% %Wu Han
-% [x0 y0 z0] = LGLTtoXYZ(114.31,30.59,R);
-% XYZ(2,:) = [x0 y0 z0];
+%Bei Jing
+[x0 y0 z0] = LGLTtoXYZ(116.41,39.90,R);
+XYZ(1,:) = [x0 y0 z0];
+%Wu Han
+[x0 y0 z0] = LGLTtoXYZ(114.31,30.59,R);
+XYZ(2,:) = [x0 y0 z0];
 %Shang Hai
 [x0 y0 z0] = LGLTtoXYZ(121.47,31.23,R);
-XYZ(1,:) = [x0 y0 z0];
+XYZ(3,:) = [x0 y0 z0];
 %Tokyo
 [x0 y0 z0] = LGLTtoXYZ(139.69,35.69,R);
-XYZ(2,:) = [x0 y0 z0];
+XYZ(4,:) = [x0 y0 z0];
 %Seoul
 [x0 y0 z0] = LGLTtoXYZ(126.58,37.33,R);
-XYZ(3,:) = [x0 y0 z0];
+XYZ(5,:) = [x0 y0 z0];
 sigma = [0:100:1000];
 for index = 1%1:length(alpha)
     for noise_level = 1%1:length(sigma)
@@ -123,9 +123,9 @@ for index = 1%1:length(alpha)
             end
         end
         %Step 3
-        thres = 10;
-        alpha = 1.0;
-        ss = 1;
+        thres = 1;
+        alpha = 1.01;
+        ss = 1e-4;
         center = R*sum(XYZ)/M/(norm(sum(XYZ)/M));
         x0 = x;
         x_ini = 2*(center*(x'/R)*center/R - x) + x;
@@ -144,10 +144,10 @@ for index = 1%1:length(alpha)
                 dBeta(i,1) = -(S(i,1) - S(i,3)*x(1)/x(3))/R/sin(D(i)/R)/graD(i);
                 dBeta(i,2) = -(S(i,2) - S(i,3)*x(2)/x(3))/R/sin(D(i)/R)/graD(i);
             end
-            [hessP, hessD] = hessPD(A,B,C,beta,R,Rb);
-            invH = diag(1./diag(hessP));
-            dP_x = (2*G'*inv_Omega*(G*P'-tau')+ delta*ones(length(P),1))'.*(invH*graP')'*dBeta;
-%             dP_x = (2*G'*inv_Omega*(G*P'-tau') + delta*ones(length(P),1))'.*graP*dBeta;
+%             [hessP, hessD] = hessPD(A,B,C,beta,R,Rb);
+%             invH = diag(1./diag(hessP));
+%             dP_x = (2*G'*inv_Omega*(G*P'-tau')+ delta*ones(length(P),1))'.*(invH*graP')'*dBeta;
+            dP_x = (2*G'*inv_Omega*(G*P'-tau') + delta*ones(length(P),1))'.*graP*dBeta;
             dP_x(3) = 0;
             while(1)
                 if ss*max(abs(dP_x))>thres
@@ -203,7 +203,7 @@ for index = 1%1:length(alpha)
                 obj_min = obj;
                 x_min = x;
             end
-            if abs(obj)<1e-7||(abs(iter-iter_old)>200&obj<100)
+            if abs(obj)<1e-7||(abs(iter-iter_old)>200&obj<10000)
                 break
             end
         end

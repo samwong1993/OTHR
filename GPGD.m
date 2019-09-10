@@ -95,7 +95,7 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
                 obj_min = obj;
                 x_min = x;
             end
-            if abs(obj)<1e-7||(abs(iter-iter_old)>200&obj<1000)
+            if abs(obj)<1e-7||(abs(iter-iter_old)>200&obj<10000)
                 break
             end
         end
