@@ -2,8 +2,8 @@
 Published by Sen Huang  
 Email: hsen@se.cuhk.edu.hk  
 ##Function  
-
-* MonteCarlo.m : Monte Carlo Simulation for the real world data/sythetic data.
+* main.m: you can test our algorithm.
+* MonteCarlo.m: Monte Carlo Simulation for the real world data/sythetic data.
 * ABC.m: Return value of A/B/C.
 * beta_bound.m: Return the permitted direct distance of the sensors by golden section search.
 * CRLB_tdoaOTHR.m: Calculate the Crame-Rao Lower Bound.
@@ -16,9 +16,9 @@ Email: hsen@se.cuhk.edu.hk
     * 2. Gradient of P/D on beta. 
     * 3. Hessian of P/D on beta.
     * 4. Gradient of objective function on beta.  
-generator.m: Generate sythetic simulation data.  
-raypath.m: Plot the ray path.  
-Initialization.m: Our initialization strategy.  
+* generator.m: Generate sythetic simulation data.  
+* raypath.m: Plot the ray path.  
+* Initialization.m: Our initialization strategy.  
 * GPGD.m: Our proposed method.
 * pltMCCRLB.m: The Monte Carlo simulation can be plotted directly by pltMCCRLB('realdata_log.txt','*k-').
 * plotobj.m: Plot the figure 3 in the paper.
