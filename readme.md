@@ -1,7 +1,7 @@
-##Code for Over-the-horizon radar
-Published by Sen Huang 
-Email: hsen@se.cuhk.edu.hk
-##Function
+##Code for Over-the-horizon radar  
+Published by Sen Huang  
+Email: hsen@se.cuhk.edu.hk  
+##Function  
 
 * MonteCarlo.m : Monte Carlo Simulation for the real world data/sythetic data.
 * ABC.m: Return value of A/B/C.
