@@ -15,10 +15,10 @@ Email: hsen@se.cuhk.edu.hk
     * 1. P/D value. 
     * 2. Gradient of P/D on beta. 
     * 3. Hessian of P/D on beta.
-    * 4. Gradient of objective function on beta.
-generator.m: Generate sythetic simulation data.
-raypath.m: Plot the ray path.
-Initialization.m: Our initialization strategy.
+    * 4. Gradient of objective function on beta.  
+generator.m: Generate sythetic simulation data.  
+raypath.m: Plot the ray path.  
+Initialization.m: Our initialization strategy.  
 * GPGD.m: Our proposed method.
 * pltMCCRLB.m: The Monte Carlo simulation can be plotted directly by pltMCCRLB('realdata_log.txt','*k-').
 * plotobj.m: Plot the figure 3 in the paper.
