@@ -2,7 +2,7 @@
 Published by Sen Huang  
 Email: hsen@se.cuhk.edu.hk  
 ##Function  
-* main.m: you can test our algorithm.
+* main.m: You can test our algorithm.
 * MonteCarlo.m: Monte Carlo Simulation for the real world data/sythetic data.
 * ABC.m: Return value of A/B/C.
 * beta_bound.m: Return the permitted direct distance of the sensors by golden section search.
