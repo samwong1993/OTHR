@@ -29,7 +29,7 @@ if plt == 1
     axis equal;
     axis auto;
 end
-M = 12;
+M = 4;
 N = M*(M-1)/2;
 Omega = 0.5*(ones(N,N) + eye(N));
 inv_Omega = Omega^-1;
@@ -109,4 +109,14 @@ fprintf("%2.2f)\n",beta(M))
 [lg lt] = XYZtoLGLT(x(1),x(2),x(3),R);
 fprintf("The distance to the emitter is: %2.2f km\n",dis)
 fprintf("%s\n",'Localization successful!')
-legend([point1,point2,point3,point4,point5],'Emitter', 'Sensors', 'Initial Point','Estimated Location','Generated Points','AutoUpdate','off');
+%Lengend
+if plt == 1
+	h = legend([point1,point2,point3,point4,point5],'Emitter', 'Sensors', 'Initial Point','Estimated Location','Generated Points','AutoUpdate','off');
+    %set(h,'box','off')
+end
+%plot ray path
+if plt == 1
+    for i = 1:M
+        raypath(emitter,XYZ(i,:),Rm,Rb,Ym,R);
+    end
+end
