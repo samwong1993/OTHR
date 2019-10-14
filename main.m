@@ -29,7 +29,7 @@ if plt == 1
     axis equal;
     axis auto;
 end
-M = 4;
+M = 5;
 N = M*(M-1)/2;
 Omega = 0.5*(ones(N,N) + eye(N));
 inv_Omega = Omega^-1;
@@ -49,31 +49,29 @@ P_f = f;
 P_F = P_f/P_fc;
 [max_dis,min_dis,upper] = beta_bound(M,F,R,Rb,Rm,Ym);
 [G] = generate_G(N,M);
-[emitter,XYZ,beta0] = generator(M,F,R,Rb,Rm,Ym,max_dis,min_dis);
-% %beta0 = [0.114957231412252,0.449398124172348,0.277420425918117,0.0168095219080640,0.103488345084960];
-% beta0 = [0.277420425918117,0.0168095219080640,0.103488345084960];
-% XYZ = zeros(M,3);
-% %Hong Kong
-% [x0 y0 z0] = LGLTtoXYZ(114.16,22.28,R);
-% emitter = [x0 y0 z0]';
-% % %Bei Jing
-% % [x0 y0 z0] = LGLTtoXYZ(116.41,39.90,R);
-% % XYZ(1,:) = [x0 y0 z0];
-% % %Wu Han
-% % [x0 y0 z0] = LGLTtoXYZ(114.31,30.59,R);
-% % XYZ(2,:) = [x0 y0 z0];
-% %Shang Hai
-% [x0 y0 z0] = LGLTtoXYZ(121.47,31.23,R);
-% XYZ(1,:) = [x0 y0 z0];
-% %Tokyo
-% [x0 y0 z0] = LGLTtoXYZ(139.69,35.69,R);
-% XYZ(2,:) = [x0 y0 z0];
-% %Seoul
-% [x0 y0 z0] = LGLTtoXYZ(126.58,37.33,R);
-% XYZ(3,:) = [x0 y0 z0];
+%[emitter,XYZ,beta0] = generator(M,F,R,Rb,Rm,Ym,max_dis,min_dis);
+beta0 = [0.114957231412252,0.449398124172348,0.277420425918117,0.0168095219080640,0.103488345084960];
+XYZ = zeros(M,3);
+%Hong Kong
+[x0 y0 z0] = LGLTtoXYZ(114.16,22.28,R);
+emitter = [x0 y0 z0]';
+%Bei Jing
+[x0 y0 z0] = LGLTtoXYZ(116.41,39.90,R);
+XYZ(1,:) = [x0 y0 z0];
+%Wu Han
+[x0 y0 z0] = LGLTtoXYZ(114.31,30.59,R);
+XYZ(2,:) = [x0 y0 z0];
+%Shang Hai
+[x0 y0 z0] = LGLTtoXYZ(121.47,31.23,R);
+XYZ(3,:) = [x0 y0 z0];
+%Tokyo
+[x0 y0 z0] = LGLTtoXYZ(139.69,35.69,R);
+XYZ(4,:) = [x0 y0 z0];
+%Seoul
+[x0 y0 z0] = LGLTtoXYZ(126.58,37.33,R);
+XYZ(5,:) = [x0 y0 z0];
 Omega = 0.5*(ones(N,N) + eye(N));
 inv_Omega = Omega^-1;
-[emitter,XYZ,beta0] = generator(M,F,R,Rb,Rm,Ym,max_dis,min_dis);
 tau = generate_tau(M,F,R,Rb,Rm,Ym,emitter,XYZ);
 %Step 3
 [x beta obj] = GPGD(M,N,P_F,R,P_Rb,P_Rm,P_Ym,G,tau,inv_Omega,upper,max_dis,min_dis,XYZ,plt);
@@ -112,7 +110,7 @@ fprintf("%s\n",'Localization successful!')
 %Lengend
 if plt == 1
 	h = legend([point1,point2,point3,point4,point5],'Emitter', 'Sensors', 'Initial Point','Estimated Location','Generated Points','AutoUpdate','off');
-    %set(h,'box','off')
+    set(h,'box','off')
 end
 %plot ray path
 if plt == 1
