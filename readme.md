@@ -2,6 +2,7 @@
 Published by Sen Huang  
 Email: hsen@se.cuhk.edu.hk  
 IDE: MATLAB R2019a
+
 ##Function  
 * main.m: You can test our algorithm.
 * MonteCarlo.m: Monte Carlo Simulation for the real-world data/sythetic data.
@@ -26,9 +27,11 @@ IDE: MATLAB R2019a
 * Set plt =1 to visualize the simulation process (figure 4).
 * perturbation.m: Plot figure 7.
 * plotCRLB.m: An demo for pltMCCRLB.m (figure 5, figure 6).
+
+
 ##Base Line
-ICASSP.m: T. Wang's method (delta is 0.1).
-CD.m:Coordinate descent
+* ICASSP.m: T. Wang's method (delta is 0.1).
+* CD.m:Coordinate descent
 
 
 ##Real-World Data
