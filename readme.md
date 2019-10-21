@@ -7,7 +7,7 @@ IDE: MATLAB R2019a
 * main.m: You can test our algorithm.
 * MonteCarlo.m: Monte Carlo Simulation for the real-world data/sythetic data.
 * ABC.m: Return value of A/B/C.
-* beta_bound.m: Return the permitted direct distance of the sensors by golden section search.
+* beta_bound.m: Return the EDR of the sensors by golden section search.
 * CRLB_tdoaOTHR.m: Calculate the Crame-Rao Lower Bound.
 * LGLTtoXYZ.m/XYZtoLGLT.m: Transformation between Latitude/Longitude and Euclidean coordinate system.
 * solve_eq.m: Recover the feasibility of beta for corresponding x.
