@@ -26,21 +26,13 @@ IDE: MATLAB R2019a
 * plotobj.m: Plot the figure 2 in the paper.
 * Set plt =1 to visualize the simulation process (figure 4).
 * perturbation.m: Plot figure 7.
-* plotCRLB.m: An demo for pltMCCRLB.m (figure 5, figure 6).
-
-
+* plotCRLB.m: An demo for pltMCCRLB.m (figure 5, figure 6).  
 ##Base Line
 * ICASSP.m: T. Wang's method (delta is 0.1).
-* CD.m:Coordinate descent
-
-
-##Real-World Data
-
-
-Here we give three real-world settings. beta0 is the true flying angle and each case has five sensors.
-
-Real-world data 1:
-
+* CD.m:Coordinate descent  
+##Real-World Data  
+Here we give three real-world settings. beta0 is the true flying angle and each case has five sensors.  
+Real-world data 1:  
 beta0 = [0.133647283541992,0.100329606166839,0.335342045407703,0.413523978325060,0.0846681067915992];  
 XYZ = zeros(M,3);  
 %Xi Ning  
@@ -82,13 +74,11 @@ XYZ(3,:) = [x0 y0 z0];
 XYZ(4,:) = [x0 y0 z0];  
 %Seoul  
 [x0 y0 z0] = LGLTtoXYZ(126.58,37.33,R);  
-XYZ(5,:) = [x0 y0 z0];  
+XYZ(5,:) = [x0 y0 z0];    
 
 Real-world data 3:  
-beta0 = [0.349025176895742,0.279243732945529,0.174632834143026,0.183395025597251,0.285385790728298]; 
-
-or
-
+beta0 = [0.349025176895742,0.279243732945529,0.174632834143026,0.183395025597251,0.285385790728298];  
+or  
 beta0 = [0.674175558279844,0.678354140357644,0.679512211766613,0.679496774102502,0.678155318189844];  
 XYZ = zeros(M,3);  
 [x0 y0 z0] = LGLTtoXYZ(116.24,39.55,R);  
