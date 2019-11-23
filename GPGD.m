@@ -96,10 +96,10 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
                 x_min = x;
             end
             if abs(obj)<1e-7||(abs(iter-iter_old)>200&obj<10000)
+                x = x_min;
+                obj = obj_min;
                 break
             end
         end
-        x = x_min;
-        obj = obj_min;
         fprintf("obj:%2.2f step size:%2.6f\n",obj,ss);
 end
