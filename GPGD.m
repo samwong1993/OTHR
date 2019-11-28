@@ -36,6 +36,7 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
                 dBeta(i,2) = -(S(i,2) - x(2))/R/sin(D(i)/R)/graD(i);
                 dBeta(i,3) = -(S(i,3) - x(3))/R/sin(D(i)/R)/graD(i);
             end
+            
             %Newton method
 %             [hessP, hessD] = hessPD(A,B,C,beta,R,Rb);
 %             invH = diag(1./diag(hessP));

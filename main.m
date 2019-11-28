@@ -1,4 +1,5 @@
 clear
+
 R = 6371.2;
 %plt = 1 plot the earth,emitter,sensors and the generated sequence
 plt = 1;
