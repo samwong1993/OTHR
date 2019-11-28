@@ -110,7 +110,7 @@ fprintf("%s\n",'Localization successful!')
 %Lengend
 if plt == 1
 	h = legend([point1,point2,point3,point4,point5],'Emitter', 'Sensors', 'Initial Point','Estimated Location','Generated Points','AutoUpdate','off');
-    set(h,'box','off')
+    %set(h,'box','off')
 end
 %plot ray path
 if plt == 1

@@ -32,8 +32,9 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
             S = XYZ;
             dBeta = zeros(M, 2);
             for i = 1:M
-                dBeta(i,1) = -(S(i,1) - S(i,3)*x(1)/x(3))/R/sin(D(i)/R)/graD(i);
-                dBeta(i,2) = -(S(i,2) - S(i,3)*x(2)/x(3))/R/sin(D(i)/R)/graD(i);
+                dBeta(i,1) = -(S(i,1) - x(1))/R/sin(D(i)/R)/graD(i);
+                dBeta(i,2) = -(S(i,2) - x(2))/R/sin(D(i)/R)/graD(i);
+                dBeta(i,3) = -(S(i,3) - x(3))/R/sin(D(i)/R)/graD(i);
             end
             %Newton method
 %             [hessP, hessD] = hessPD(A,B,C,beta,R,Rb);
@@ -41,7 +42,6 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
 %             dP_x = (2*G'*inv_Omega*(G*P'-tau'))'.*(invH*graP')'*dBeta;
             %Gradient descent
             dP_x = (2*G'*inv_Omega*(G*P'-tau'))'.*graP*dBeta;
-            dP_x(3) = 0;
             while(1)
                 if ss*max(abs(dP_x))>thres
                     ss = 0.5*ss;
@@ -50,30 +50,11 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
                 end
             end
             x = x - ss*dP_x;
-            if isnan(x(1))
-                break
-            end
             ss = ss*mo;
-            if norm(x(1:2))>=R
-                x(x>R) = R;
-                x(x<-R) = -R;
-                x(1:2) = x(1:2)/norm(x(1:2))*R*0.99;
-            end
-            x(3) = sqrt(R^2 - (x(1)^2+x(2)^2));
-            for i =1:20
+            x = x/norm(x)*R;
+            for i =1:1
                 for k = 1:M
                     beta = solve_eq(F,R,Rb,Rm,Ym,beta,XYZ,x,k);
-                end
-            end
-            if ~all(beta>0)
-                if norm(x(1:2))>=R
-                    x(1:2) = x(1:2)/norm(x(1:2))*R;
-                end
-                x(3) = - sqrt(R^2 - (x(1)^2+x(2)^2));
-                for i =1:20
-                    for k = 1:M
-                        beta = solve_eq(F,R,Rb,Rm,Ym,beta,XYZ,x,k);
-                    end
                 end
             end
             beta(beta<0) = 0;
