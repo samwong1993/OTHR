@@ -71,8 +71,8 @@ P_F = P_f/P_fc;
 % XYZ(5,:) = [x0 y0 z0];
 alpha = [90:1:99 101:1:110];%[6640:1:6649 6651:1:6660];%[9.9:0.01:9.99 10.01:0.01:10.1];
 sigma = [0:100:1000];
-for index = 1:length(alpha)
-    for noise_level = 1:length(sigma)
+for index = 94%1:length(alpha)
+    for noise_level = 10%1:length(sigma)
 %         P_fc = alpha(index);
 %         P_F = P_f/P_fc;
 %         P_Rm = alpha(index);
@@ -89,37 +89,37 @@ for index = 1:length(alpha)
         %Step 3
         [x beta obj] = GPGD(M,N,P_F,R,P_Rb,P_Rm,P_Ym,G,tau,inv_Omega,upper,max_dis,min_dis,XYZ,plt);
         dis = norm(x - emitter');
-        %Output results
-        if plt == 1
-            scatter3(emitter(1),emitter(2),emitter(3),50,'filled','r')
-            scatter3(x(1),x(2),x(3),50,'k*')
-            %text(emitter(1),emitter(2),emitter(3),'e')
-        end
-        for i = 1:M
-            if plt == 1
-                scatter3(XYZ(i,1),XYZ(i,2),XYZ(i,3),'filled','c')
-                temp = strcat('s ',num2str(i));
-                text(XYZ(i,1),XYZ(i,2),XYZ(i,3),temp);
-            end
-            fprintf("Sensor %d:(%2.2f,%2.2f,%2.2f)\n",i,XYZ(i,1),XYZ(i,2),XYZ(i,3))
-        end
-        fprintf("Non-Perturbated:r0:%2.2f km,Rm:%2.2f km,Ym:%2.2f km,fc:%2.2f MHz,f:%2.2f MHz\n",R,Rm,Ym,fc,f)
-        fprintf("Perturbated: r0:%2.2f km,Rm:%2.2f km,Ym:%2.2f km,fc:%2.2f MHz,f:%2.2f MHz\n",R,P_Rm,P_Ym,P_fc,P_f)
-        fprintf("True Location:(%2.2f,%2.2f,%2.2f)\n",emitter(1),emitter(2),emitter(3))
-        fprintf("Location:(%2.2f,%2.2f,%2.2f)\n",x(1),x(2),x(3))
-        fprintf("True Flying angle:(")
-        for i = 1:M-1
-            fprintf("%2.2f,",beta0(i))
-        end
-        fprintf("%2.2f)\n",beta0(M))
-        fprintf("Flying angle:(")
-        for i = 1:M-1
-            fprintf("%2.2f,",beta(i))
-        end
-        fprintf("%2.2f)\n",beta(M))
-        [lg lt] = XYZtoLGLT(x(1),x(2),x(3),R);
-        fprintf("The distance to the emitter is: %2.2f km\n",dis)
-        fprintf("%s\n",'Localization successful!')
+%         %Output results
+%         if plt == 1
+%             scatter3(emitter(1),emitter(2),emitter(3),50,'filled','r')
+%             scatter3(x(1),x(2),x(3),50,'k*')
+%             %text(emitter(1),emitter(2),emitter(3),'e')
+%         end
+%         for i = 1:M
+%             if plt == 1
+%                 scatter3(XYZ(i,1),XYZ(i,2),XYZ(i,3),'filled','c')
+%                 temp = strcat('s ',num2str(i));
+%                 text(XYZ(i,1),XYZ(i,2),XYZ(i,3),temp);
+%             end
+%             fprintf("Sensor %d:(%2.2f,%2.2f,%2.2f)\n",i,XYZ(i,1),XYZ(i,2),XYZ(i,3))
+%         end
+%         fprintf("Non-Perturbated:r0:%2.2f km,Rm:%2.2f km,Ym:%2.2f km,fc:%2.2f MHz,f:%2.2f MHz\n",R,Rm,Ym,fc,f)
+%         fprintf("Perturbated: r0:%2.2f km,Rm:%2.2f km,Ym:%2.2f km,fc:%2.2f MHz,f:%2.2f MHz\n",R,P_Rm,P_Ym,P_fc,P_f)
+%         fprintf("True Location:(%2.2f,%2.2f,%2.2f)\n",emitter(1),emitter(2),emitter(3))
+%         fprintf("Location:(%2.2f,%2.2f,%2.2f)\n",x(1),x(2),x(3))
+%         fprintf("True Flying angle:(")
+%         for i = 1:M-1
+%             fprintf("%2.2f,",beta0(i))
+%         end
+%         fprintf("%2.2f)\n",beta0(M))
+%         fprintf("Flying angle:(")
+%         for i = 1:M-1
+%             fprintf("%2.2f,",beta(i))
+%         end
+%         fprintf("%2.2f)\n",beta(M))
+%         [lg lt] = XYZtoLGLT(x(1),x(2),x(3),R);
+%         fprintf("The distance to the emitter is: %2.2f km\n",dis)
+%         fprintf("%s\n",'Localization successful!')
         fprintf(fid,"%2.2f,%d,%2.2f\n",noise_level,index,dis);
     end
 end

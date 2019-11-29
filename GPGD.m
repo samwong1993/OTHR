@@ -3,7 +3,7 @@
 %Email: huangsen1993@gmail.com
 %mo is the momentum parameter and distance
 function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_dis,XYZ,plt)
-        thres = 10;
+        thres = 20;
         mo = 1.05;
         ss = 1e-4;
         x = [];
@@ -12,7 +12,7 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
             scatter3(x(1),x(2),x(3),50,'filled','b')
         end
         beta = zeros(1,M);
-        for i =1:20
+        for i =1:1
             for k = 1:M
                 beta = solve_eq(F,R,Rb,Rm,Ym,beta,XYZ,x,k);
             end
@@ -63,7 +63,7 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
             [P, D] = PD(A,B,C,beta,R,Rb);
             obj = (G*P'-tau')'*inv_Omega*(G*P'-tau');
             if obj<20
-                thres = 1;
+                thres = 5;
                 mo = 1.005;
             end
             if plt == 1
@@ -76,7 +76,7 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
                 obj_min = obj;
                 x_min = x;
             end
-            if abs(obj)<1e-7||(abs(iter-iter_old)>200&obj<10000)
+            if abs(obj)<1e-7||(abs(iter-iter_old)>50&obj<50000)
                 x = x_min;
                 obj = obj_min;
                 break
