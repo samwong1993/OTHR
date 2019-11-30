@@ -4,10 +4,17 @@ R = 6371.2;
 plt = 1;
 if plt == 1
     figure('color','k')
+    ha=axes('units','normalized','position',[0 0 1 1]);
+    uistack(ha,'down')
+    img=imread('background.jpg');
+    image(img)
+    colormap gray
+    set(ha,'handlevisibility','off','visible','off');
+    rotate3d on
+    hold on
     %Add legend
     %emitter
     point1 = scatter3(0,0,0,50,'filled','r');
-    hold on
     %sensors
     point2 = scatter3(0,0,0,'filled','c');
     %initial point
