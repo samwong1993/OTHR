@@ -57,7 +57,7 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
             end
 %           Alternating Projection
             if all(dis<max_dis)&all(dis>min_dis)
-                for i = 1:10
+                for i = 1:20
                     x = hildreth(XYZ,max_dis,min_dis,M,R,x');
                     x = x';
                     x = x/norm(x)*R;
