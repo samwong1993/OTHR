@@ -22,7 +22,7 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
         x_min = [];
         for  iter = 1:1000000
             x_old = x;
-            if mod(iter,20)==0&&obj>10000
+            if mod(iter,100)==0&&obj>10000
                 x = Initialization(XYZ,max_dis,min_dis,M,inv_Omega,G,tau,F,R,Rb,Rm,Ym,upper,x);  
             end
             [A B C] = ABC(F,R,Rb,Rm,Ym,beta);
@@ -51,14 +51,24 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
             end
             x = x - ss*dP_x;
             ss = ss*mo;
+            dis = [];
+            for iter = 1:M
+                dis = [dis norm(XYZ(iter,:) - x)];
+            end
+%           Alternating Projection
+            if all(dis<max_dis)&all(dis>min_dis)
+                for i = 1:10
+                    x = hildreth(XYZ,max_dis,min_dis,M,R,x');
+                    x = x';
+                    x = x/norm(x)*R;
+                end
+            end
             x = x/norm(x)*R;
             for i =1:1
                 for k = 1:M
                     beta = solve_eq(F,R,Rb,Rm,Ym,beta,XYZ,x,k);
                 end
             end
-            beta(beta<0) = 0;
-            beta(beta>upper) = upper;
             [A B C] = ABC(F,R,Rb,Rm,Ym,beta);
             [P, D] = PD(A,B,C,beta,R,Rb);
             obj = (G*P'-tau')'*inv_Omega*(G*P'-tau');

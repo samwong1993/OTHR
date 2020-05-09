@@ -6,7 +6,7 @@ clear
 %%plot monte carlo results for CRLB
 figure(1)
 subplot(2,1,1)
-pltMCCRLB('M3WT.txt','og:')
+pltMCCRLB('M3WT.txt','og-')
 title('Blocked by infeasible region')
 set(gca,'position',[0.15 0.7 0.75 0.15])
 grid on
@@ -15,10 +15,10 @@ legend boxoff;
 legend('Quasi-Newton Monte Carlo simulation with 3 sensors')
 subplot(2,1,2)
 set(gca,'position',[0.15 0.2 0.75 0.4])
-pltMCCRLB('M3HS.txt','ok:')
+pltMCCRLB('M3HS.txt','*k--')
 hold on
-pltMCCRLB('M5HS.txt','^r--')
-pltMCCRLB('M5WT.txt','^c--')
+pltMCCRLB('M5HS.txt','^r-')
+pltMCCRLB('M5WT.txt','^b-')
 %%plot CRLB
 R = 6371.2;
 Rm = 6650;

@@ -1,5 +1,5 @@
 clear
-fid=fopen('M3HS.txt','a+');
+fid=fopen('M5HS.txt','a+');
 R = 6371.2;
 %plt = 1 plot the earth,emitter,sensors and the generated sequence
 plt = 0;
@@ -54,21 +54,21 @@ XYZ = zeros(M,3);
 %Hong Kong
 [x0 y0 z0] = LGLTtoXYZ(114.16,22.28,R);
 emitter = [x0 y0 z0]';
-% %Bei Jing
-% [x0 y0 z0] = LGLTtoXYZ(116.41,39.90,R);
-% XYZ(1,:) = [x0 y0 z0];
-% %Wu Han
-% [x0 y0 z0] = LGLTtoXYZ(114.31,30.59,R);
-% XYZ(2,:) = [x0 y0 z0];
+%Bei Jing
+[x0 y0 z0] = LGLTtoXYZ(116.41,39.90,R);
+XYZ(1,:) = [x0 y0 z0];
+%Wu Han
+[x0 y0 z0] = LGLTtoXYZ(114.31,30.59,R);
+XYZ(2,:) = [x0 y0 z0];
 %Shang Hai
 [x0 y0 z0] = LGLTtoXYZ(121.47,31.23,R);
-XYZ(1,:) = [x0 y0 z0];
+XYZ(3,:) = [x0 y0 z0];
 %Tokyo
 [x0 y0 z0] = LGLTtoXYZ(139.69,35.69,R);
-XYZ(2,:) = [x0 y0 z0];
+XYZ(4,:) = [x0 y0 z0];
 %Seoul
 [x0 y0 z0] = LGLTtoXYZ(126.58,37.33,R);
-XYZ(3,:) = [x0 y0 z0];
+XYZ(5,:) = [x0 y0 z0];
 %alpha = [90:1:99 101:1:110];%[6640:1:6649 6651:1:6660];%[9.9:0.01:9.99 10.01:0.01:10.1];
 sigma = [0:100:1000];
 for index = 1:100%length(alpha)
@@ -84,11 +84,8 @@ for index = 1:100%length(alpha)
         noise_t = (sigma_t*G*noise_t0)';
         tau = generate_tau(M,F,R,Rb,Rm,Ym,emitter,XYZ) + noise_t;
         %Step 3
-        dis = 999;
-        while dis>20
-            [x beta obj] = GPGD(M,N,P_F,R,P_Rb,P_Rm,P_Ym,G,tau,inv_Omega,upper,max_dis,min_dis,XYZ,plt);
-            dis = norm(x - emitter');
-        end
+        [x beta obj] = GPGD(M,N,P_F,R,P_Rb,P_Rm,P_Ym,G,tau,inv_Omega,upper,max_dis,min_dis,XYZ,plt);
+        dis = norm(x - emitter');
 %         %Output results
 %         if plt == 1
 %             scatter3(emitter(1),emitter(2),emitter(3),50,'filled','r')
