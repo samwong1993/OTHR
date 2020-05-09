@@ -22,7 +22,7 @@ function [x beta obj] = GPGD(M,N,F,R,Rb,Rm,Ym,G,tau,inv_Omega,upper,max_dis,min_
         x_min = [];
         for  iter = 1:1000000
             x_old = x;
-            if mod(iter,100)==0&&obj>10000
+            if mod(iter,50)==0&&obj>10000
                 x = Initialization(XYZ,max_dis,min_dis,M,inv_Omega,G,tau,F,R,Rb,Rm,Ym,upper,x);  
             end
             [A B C] = ABC(F,R,Rb,Rm,Ym,beta);
