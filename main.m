@@ -1,7 +1,7 @@
 clear
 R = 6371.2;
 %plt = 1 plot the earth,emitter,sensors and the generated sequence
-plt = 0;
+plt = 1;
 if plt == 1
     figure('color','k')
     ha=axes('units','normalized','position',[0 0 1 1]);
