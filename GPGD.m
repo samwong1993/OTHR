@@ -56,7 +56,7 @@ for  iter = 1:1000000
         dis = [dis norm(XYZ(iter,:) - x)];
     end
     %           Alternating Projection
-    for i = 1:20
+    for i = 1:1
         x_p = x;
         x = hildreth(XYZ,max_dis,min_dis,M,R,x');
         x = x';
@@ -65,7 +65,8 @@ for  iter = 1:1000000
             break;
         end
     end
-    
+    beta(beta>upper)= upper;
+    beta(beta<0)= 0;
     for i =1:1
         for k = 1:M
             beta = solve_eq(F,R,Rb,Rm,Ym,beta,XYZ,x,k);
@@ -76,7 +77,7 @@ for  iter = 1:1000000
     obj = (G*P'-tau')'*inv_Omega*(G*P'-tau');
     if obj<20
         thres = 5;
-        mo = 1.05;
+        mo = 1.005;
     end
     if plt == 1
         scatter3(x(1),x(2),x(3),5,'m')
