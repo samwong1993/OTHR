@@ -12,7 +12,7 @@ while(1)
 end
 x0 = x;
 beta = zeros(1,M);
-for i =1:20
+for i =1:1
     for k = 1:M
         beta = solve_eq(F,R,Rb,Rm,Ym,beta,XYZ,x,k);
     end
@@ -24,7 +24,7 @@ beta(beta>upper) = upper;
 obj_x0 = (G*P'-tau')'*inv_Omega*(G*P'-tau');
 center = R*sum(XYZ)/M/(norm(sum(XYZ)/M));
 x_ini = 2*(center*(x'/R)*center/R - x) + x;
-for i =1:20
+for i =1:1
     for k = 1:M
         beta = solve_eq(F,R,Rb,Rm,Ym,beta,XYZ,x_ini,k);
     end
@@ -44,7 +44,7 @@ end
 
 if ~isempty(x_input)
     beta = zeros(1,M);
-    for i =1:20
+    for i =1:1
         for k = 1:M
             beta = solve_eq(F,R,Rb,Rm,Ym,beta,XYZ,x_input,k);
         end

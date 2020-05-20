@@ -1,5 +1,5 @@
 clear
-fid=fopen('M3WT.txt','a+');
+fid=fopen('randM5WTtau0_0001.txt','a+');
 R = 6371.2;
 %plt = 1 plot the earth,emitter,sensors and the generated sequence
 plt = 0;
@@ -30,10 +30,10 @@ if plt == 1
     axis equal;
     axis auto;
 end
-M = 3;
+M = 5;
 N = M*(M-1)/2;
-Omega = 0.5*(ones(N,N) + eye(N));
-inv_Omega = Omega^-1;
+Omega = covariance(1,M);
+inv_Omega = inv(Omega(1:M-1,1:M-1));
 Rm = 6650;
 Ym = 100;
 Rb = Rm - Ym;
@@ -47,39 +47,58 @@ P_Rb = P_Rm - P_Ym;
 P_fc = fc;
 P_f = f;
 P_F = P_f/P_fc;
-delta = 0.1;
+delta = 0.0001;
 [max_dis,min_dis,upper] = beta_bound(M,F,R,Rb,Rm,Ym);
 [G] = generate_G(N,M);
 %[emitter,XYZ,beta0] = generator(M,F,R,Rb,Rm,Ym,max_dis,min_dis);
-%beta0 = [0.114957231412252,0.449398124172348,0.277420425918117,0.0168095219080640,0.103488345084960];
-beta0 = [0.277420425918117,0.0168095219080640,0.103488345084960];
+% beta0 = [0.277420425918117,0.0168095219080640,0.103488345084960];
+% XYZ = zeros(M,3);
+% %Hong Kong
+% [x0 y0 z0] = LGLTtoXYZ(114.16,22.28,R);
+% emitter = [x0 y0 z0]';
+% %Shang Hai
+% [x0 y0 z0] = LGLTtoXYZ(121.47,31.23,R);
+% XYZ(1,:) = [x0 y0 z0];
+% %Tokyo
+% [x0 y0 z0] = LGLTtoXYZ(139.69,35.69,R);
+% XYZ(2,:) = [x0 y0 z0];
+% %Seoul
+% [x0 y0 z0] = LGLTtoXYZ(126.58,37.33,R);
+% XYZ(3,:) = [x0 y0 z0];
+beta0 = [0.114957231412252,0.449398124172348,0.277420425918117,0.0168095219080640,0.103488345084960];
 XYZ = zeros(M,3);
 %Hong Kong
 [x0 y0 z0] = LGLTtoXYZ(114.16,22.28,R);
 emitter = [x0 y0 z0]';
-% %Bei Jing
-% [x0 y0 z0] = LGLTtoXYZ(116.41,39.90,R);
-% XYZ(1,:) = [x0 y0 z0];
-% %Wu Han
-% [x0 y0 z0] = LGLTtoXYZ(114.31,30.59,R);
-% XYZ(2,:) = [x0 y0 z0];
+%Bei Jing
+[x0 y0 z0] = LGLTtoXYZ(116.41,39.90,R);
+XYZ(1,:) = [x0 y0 z0];
+%Wu Han
+[x0 y0 z0] = LGLTtoXYZ(114.31,30.59,R);
+XYZ(2,:) = [x0 y0 z0];
 %Shang Hai
 [x0 y0 z0] = LGLTtoXYZ(121.47,31.23,R);
-XYZ(1,:) = [x0 y0 z0];
+XYZ(3,:) = [x0 y0 z0];
 %Tokyo
 [x0 y0 z0] = LGLTtoXYZ(139.69,35.69,R);
-XYZ(2,:) = [x0 y0 z0];
+XYZ(4,:) = [x0 y0 z0];
 %Seoul
 [x0 y0 z0] = LGLTtoXYZ(126.58,37.33,R);
-XYZ(3,:) = [x0 y0 z0];
+XYZ(5,:) = [x0 y0 z0];
+
+% choose = [2 4 5]
+% beta0 = beta0(choose);
+% XYZ = XYZ(choose,:);
 sigma = [0:100:1000];
-for index = 1:100%1:length(alpha)
+for index = 22:100%1:length(alpha)
     for noise_level = 1:length(sigma)
         sigma_t = sigma(noise_level)* 10^-9 * 3 * 10^5 ;
         [G] = generate_G(N,M);
         noise_t0 = randn(M,1);
         noise_t = (sigma_t*G*noise_t0)';
         tau = generate_tau(M,F,R,Rb,Rm,Ym,emitter,XYZ) + noise_t;
+        G = G(1:M-1,:);
+        tau = tau(1:M-1);
         %Step 1 Coordernate Descent
         beta = zeros(1,M);
         [A B C] = ABC(F,R,Rb,Rm,Ym,beta);
@@ -123,8 +142,8 @@ for index = 1:100%1:length(alpha)
             end
         end
         %Step 3
-        thres = 1;
-        alpha = 1.01;
+        thres = 10;
+        alpha = 1.05;
         ss = 1e-4;
         center = R*sum(XYZ)/M/(norm(sum(XYZ)/M));
         x0 = x;
@@ -132,6 +151,28 @@ for index = 1:100%1:length(alpha)
         iter_old = 1;
         obj_min = 9999999;
         x_min = [];
+        
+        while(1)
+            x = randn(1,3);
+            x = x/norm(x)*R;
+            dis = [];
+            for iter = 1:M
+                dis = [dis norm(XYZ(iter,:) - x)];
+            end
+            if all(dis<max_dis)&all(dis>min_dis)
+                break
+            end
+        end
+        x0 = x;
+        beta = zeros(1,M);
+        for i =1:1
+            for k = 1:M
+                beta = solve_eq(F,R,Rb,Rm,Ym,beta,XYZ,x,k);
+            end
+        end
+        beta(beta<0) = 0;
+        beta(beta>upper) = upper;
+        
         for iter = 1:100000
             [A B C] = ABC(F,R,Rb,Rm,Ym,beta);
             [P, D] = PD(A,B,C,beta,R,Rb);
@@ -182,7 +223,7 @@ for index = 1:100%1:length(alpha)
             [A B C] = ABC(F,R,Rb,Rm,Ym,beta);
             [P, D] = PD(A,B,C,beta,R,Rb);
             obj = (G*P'-tau')'*inv_Omega*(G*P'-tau') + delta*ones(M,1)'*P';
-            if obj<20
+            if obj<1000
                 thres = 1;
                 alpha = 1.005;
             end
@@ -197,7 +238,7 @@ for index = 1:100%1:length(alpha)
                 obj_min = obj;
                 x_min = x;
             end
-            if abs(obj)<1e-7||(abs(iter-iter_old)>50&obj<10000)
+            if abs(obj)<1e-7||(abs(iter-iter_old)>200)
                 break
             end
         end
@@ -241,5 +282,4 @@ for index = 1:100%1:length(alpha)
     end
 end
 fprintf(fid,"\t\n");
-fprintf("Completed\rThe results are saved as realdata_log.txt\n");
 fclose(fid);

@@ -5,20 +5,20 @@ clf
 clear
 %%plot monte carlo results for CRLB
 figure(1)
-subplot(2,1,1)
-pltMCCRLB('M3WT.txt','og:')
-title('Blocked by infeasible region')
-set(gca,'position',[0.15 0.7 0.75 0.15])
+% subplot(2,1,1)
+% title('Blocked by infeasible region')
+% set(gca,'position',[0.15 0.7 0.75 0.15])
 grid on
-ylim([220000 230000])
-legend boxoff;
-legend('Quasi-Newton Monte Carlo simulation with 3 sensors')
-subplot(2,1,2)
-set(gca,'position',[0.15 0.2 0.75 0.4])
-pltMCCRLB('M3HS.txt','ok:')
+% ylim([220000 230000])
+% legend boxoff;
+legend()
+% subplot(2,1,2)
+% set(gca,'position',[0.15 0.2 0.75 0.4])
+pltMCCRLB('M4HS.txt','ok:')
 hold on
-pltMCCRLB('M5HS.txt','^r--')
-pltMCCRLB('M5WT.txt','^c--')
+pltMCCRLB('M5HS.txt','^k--')
+pltMCCRLB('M4WTtau0_0001.txt','ob:')
+pltMCCRLB('M5WTtau0_0001.txt','^b--')
 %%plot CRLB
 R = 6371.2;
 Rm = 6650;
@@ -31,7 +31,7 @@ F = f/fc;
 beta0 = [0.114957231412252,0.449398124172348,0.277420425918117,0.0168095219080640,0.103488345084960];
 %Hong Kong
 [x0 y0 z0] = LGLTtoXYZ(114.16,22.28,R);
-emitter = [x0 y0  z0]';
+emitter = [x0 y0 z0]';
 %Bei Jing
 [x0 y0 z0] = LGLTtoXYZ(116.41,39.90,R);
 XYZ(1,:) = [x0 y0 z0];
@@ -55,8 +55,8 @@ sigma_axis = sigma;
 %sigma = sigma_axis;
 sigma = 10^(-9)*sigma*c;
 crlb = zeros(length(sigma),1);
-M = 3;
-index = [3 4 5] ;
+M = 4;
+index = [1 2 3 4] ;
 for noise_level = 2:length(sigma)
     crlb(noise_level) = CRLB_tdoaOTHR(F, Rb, Ym, Rm, R, beta0, XYZ, emitter, sigma(noise_level), M,index);
 end
@@ -67,9 +67,9 @@ for noise_level = 2:length(sigma)
     crlb(noise_level) = CRLB_tdoaOTHR(F, Rb, Ym, Rm, R, beta0, XYZ, emitter, sigma(noise_level), M,index);
 end
 plot(sigma_axis,1000*crlb,'r-', 'linewidth', 1.1, 'markerfacecolor', [36, 169, 225]/255);
-title('General cases')         
+% title('General cases')         
 grid on
 legend boxoff;
-legend('GPGD Monte Carlo simulation with 3 sensors','GPGD Monte Carlo simulation with 5 sensors','Quasi-Newton Monte Carlo simulation with 5 sensors','CRLB with 3 sensors','CRLB with 5 sensors')
+legend('4 sensors GPGD with time:4.86(s)','5 sensors GPGD with time:5.37(s)','4 sensors Quasi-Newton with \tau = 0.0001 time:13.98(s)','5 sensors Quasi-Newton with \tau = 0.0001 time:14.99(s)','CRLB with 4 sensors','CRLB with 5 sensors')
 xlabel('Standard Deviation of TDOA Measurement Noise (ns)')
 ylabel('RMSE of the Geolocation(m)')

@@ -1,5 +1,5 @@
 clear
-fid=fopen('M3HS.txt','a+');
+fid=fopen('M5HS.txt','a+');
 R = 6371.2;
 %plt = 1 plot the earth,emitter,sensors and the generated sequence
 plt = 0;
@@ -30,10 +30,10 @@ if plt == 1
     axis equal;
     axis auto;
 end
-M = 3;
+M = 4;
 N = M*(M-1)/2;
-Omega = 0.5*(ones(N,N) + eye(N));
-inv_Omega = Omega^-1;
+Omega = covariance(1,M);
+inv_Omega = inv(Omega(1:M-1,1:M-1));
 Rm = 6650;
 Ym = 100;
 Rb = Rm - Ym;
@@ -48,28 +48,41 @@ P_fc = fc;
 P_f = f;
 P_F = P_f/P_fc;
 [max_dis,min_dis,upper] = beta_bound(M,F,R,Rb,Rm,Ym);
-%beta0 = [0.114957231412252,0.449398124172348,0.277420425918117,0.0168095219080640,0.103488345084960];
-beta0 = [0.277420425918117,0.0168095219080640,0.103488345084960];
+% beta0 = [0.349025176895742,0.279243732945529,0.174632834143026,0.183395025597251,0.285385790728298];  
+% XYZ = zeros(M,3);  
+% [x0 y0 z0] = LGLTtoXYZ(116.24,39.55,R);  
+% emitter = [x0 y0 z0]';  
+% [x0 y0 z0] = LGLTtoXYZ(128.72,40.55,R);  
+% XYZ(1,:) = [x0 y0 z0];  
+% [x0 y0 z0] = LGLTtoXYZ(130.42,38.68,R);  
+% XYZ(2,:) = [x0 y0 z0];  
+% [x0 y0 z0] = LGLTtoXYZ(132.94,33.82,R);  
+% XYZ(3,:) = [x0 y0 z0];  
+% [x0 y0 z0] = LGLTtoXYZ(130.90,31.84,R);  
+% XYZ(4,:) = [x0 y0 z0];  
+% [x0 y0 z0] = LGLTtoXYZ(129.06,35.63,R);  
+% XYZ(5,:) = [x0 y0 z0];  
+beta0 = [0.114957231412252,0.449398124172348,0.277420425918117,0.0168095219080640,0.103488345084960];
 XYZ = zeros(M,3);
 %Hong Kong
 [x0 y0 z0] = LGLTtoXYZ(114.16,22.28,R);
 emitter = [x0 y0 z0]';
-% %Bei Jing
-% [x0 y0 z0] = LGLTtoXYZ(116.41,39.90,R);
-% XYZ(1,:) = [x0 y0 z0];
-% %Wu Han
-% [x0 y0 z0] = LGLTtoXYZ(114.31,30.59,R);
-% XYZ(2,:) = [x0 y0 z0];
+%Bei Jing
+[x0 y0 z0] = LGLTtoXYZ(116.41,39.90,R);
+XYZ(1,:) = [x0 y0 z0];
+%Wu Han
+[x0 y0 z0] = LGLTtoXYZ(114.31,30.59,R);
+XYZ(2,:) = [x0 y0 z0];
 %Shang Hai
 [x0 y0 z0] = LGLTtoXYZ(121.47,31.23,R);
-XYZ(1,:) = [x0 y0 z0];
+XYZ(3,:) = [x0 y0 z0];
 %Tokyo
 [x0 y0 z0] = LGLTtoXYZ(139.69,35.69,R);
-XYZ(2,:) = [x0 y0 z0];
+XYZ(4,:) = [x0 y0 z0];
 %Seoul
 [x0 y0 z0] = LGLTtoXYZ(126.58,37.33,R);
-XYZ(3,:) = [x0 y0 z0];
-%alpha = [90:1:99 101:1:110];%[6640:1:6649 6651:1:6660];%[9.9:0.01:9.99 10.01:0.01:10.1];
+XYZ(5,:) = [x0 y0 z0];
+% %alpha = [90:1:99 101:1:110];%[6640:1:6649 6651:1:6660];%[9.9:0.01:9.99 10.01:0.01:10.1];
 sigma = [0:100:1000];
 for index = 1:100%length(alpha)
     for noise_level = 1:length(sigma)
@@ -86,7 +99,7 @@ for index = 1:100%length(alpha)
         %Step 3
         dis = 999;
         while dis>20
-            [x beta obj] = GPGD(M,N,P_F,R,P_Rb,P_Rm,P_Ym,G,tau,inv_Omega,upper,max_dis,min_dis,XYZ,plt);
+            [x beta obj] = GPGD(M,N,P_F,R,P_Rb,P_Rm,P_Ym,G(1:M-1,:),tau(1:M-1),inv_Omega,upper,max_dis,min_dis,XYZ,plt);
             dis = norm(x - emitter');
         end
 %         %Output results

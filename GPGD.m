@@ -20,7 +20,7 @@ end
 iter_old = 1;
 obj_min = 9999999;
 x_min = [];
-for  iter = 1:1000000
+for  iter = 1:10000
     x_old = x;
     if mod(iter,20)==0&&obj>10000
         x = Initialization(XYZ,max_dis,min_dis,M,inv_Omega,G,tau,F,R,Rb,Rm,Ym,upper,x);
@@ -51,10 +51,10 @@ for  iter = 1:1000000
     end
     x = x - ss*dP_x;
     ss = ss*mo;
-    dis = [];
-    for iter = 1:M
-        dis = [dis norm(XYZ(iter,:) - x)];
-    end
+%     dis = [];
+%     for iter = 1:M
+%         dis = [dis norm(XYZ(iter,:) - x)];
+%     end
     %           Alternating Projection
     for i = 1:1
         x_p = x;
